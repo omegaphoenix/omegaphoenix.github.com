@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0071)http://courses.cms.caltech.edu/cs11/material/projects/project-plan.html -->
 <html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<title>CS11 Project Plan Outline</title>
+<title>CS11 Project Plan Outline and Weekly Reports</title>
 
 <style type="text/css">
 
@@ -19,7 +19,8 @@ dt {
 <h2>CS11 Project Plan Outline</h2>
 
 <p>
-  Justin Leong's project plan outline for 2017 CS11 Spring Term.
+  Justin Leong's project plan outline for 2017 CS11 Spring Term. Scroll down
+  for weekly reports.
 </p>
 
 <hr>
@@ -181,6 +182,112 @@ dt {
 
 </dl>
 
+<hr>
+
+<h2>CS11 Weekly Report 1</h2>
+<dl>
+<dt>Tasks Accomplished</dt>
+<dd>
+  <ul>
+    <li>
+      <p>
+        Finished project proposal and updated it to use Phoenix and Elixir
+        instead of Haskell and Hapstack/Yesod.
+      </p>
+    </li>
+    <li>
+      <p>
+        Installed Elm, Elixir, Erlang, Postgres, Phoenix.
+      </p>
+    </li>
+    <li>
+      <p>
+        Started tutorial on
+        <a href="http://www.cultivatehq.com/posts/phoenix-elm-1/">
+          Phoenix with Elm</a> on Cultivate. Got a Phoenix web application
+        running and integrated Elm using Brunch to automatically build the
+        Elm file.
+      </p>
+    </li>
+  </ul>
+</dd>
+
+<dt>Issues Encountered</dt>
+<dd>
+  <ul>
+    <li>
+      <p>
+        Couldn't get elm-reactor to run using elm@^0.17.0 or elm@^0.18.0.
+        It worked using elm@^0.16.0.
+        I tried asking about this issue on the Elm slack channel but I didn't
+        get any useful responses.
+        Since version 0.18.0 was required for the Elm tutorial, I found a
+        different tutorial to follow on
+        <a href="http://www.cultivatehq.com/posts/phoenix-elm-1/">
+          Phoenix with Elm</a> on Cultivate.
+      </p>
+    </li>
+    <li>
+      <p>
+        Elixir wasn't connecting to the Postgres server correctly on
+        "mix ecto.create".  The error was "Error tcp connect: non-existing
+        domain - :nxdomain". To fix this, I had to set the hostname to
+        "0.0.0.0" instead of "localhost" in config/dev.exs and
+        config/test.exs. Also had to modify port to 5432 and listen_addresses
+        to '*' in /etc/postgresql/9.6/main/postgresql.conf. I also uninstalled
+        postgres 9.5 since I had multiple instances (9.5 and 9.6) running at
+        one point. Before modifying the postgresql.conf file, I could not even
+        log into postgres and access the postgres user since it was looking
+        for 5432 but the port was something else.
+      </p>
+    </li>
+    <li>
+      <p>
+        Couldn't "apt install esl-erlang" due to broken dependencies. Tried
+        autoclean, clean, -f, and various other tricks to fix them.  Ended up
+        running Synaptic Package Manager and removing all other erlang
+        packages (erlang-doc, etc.) and then the conflicts were resolved and
+        esl-erlang could be installed. The elixir package had already been
+        installed.
+      </p>
+    </li>
+    <li>
+      <p>
+        Couldn't get anything to display at first after integrating Elm.
+        Looked at example code for tutorial and realized I was missing a line
+        in brunch-config.js ("web/elm/SeatSaver.elm").
+      </p>
+    </li>
+  </ul>
+</dd>
+
+<dt>Next Week's Tasks</dt>
+<dd>
+  <ul>
+    <li>
+      <p>
+        Continue <a href="http://www.cultivatehq.com/posts/phoenix-elm-1/">
+          Phoenix with Elm tutorial</a>.
+      </p>
+    </li>
+    <li>
+      <p>
+        Reinstall all dependencies on Digital Ocean server.
+      </p>
+    </li>
+    <li>
+      <p>
+        Get Postgres running on server.
+      </p>
+    </li>
+    <li>
+      <p>
+        Get basic Phoenix web application with Elm running on server.
+      </p>
+    </li>
+  </ul>
+</dd>
+</dl>
 <hr>
 <font size="-1">
 Last updated March 21, 2017.<br>
