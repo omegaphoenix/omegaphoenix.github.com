@@ -1,6 +1,7 @@
 <div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}", name: "Phoenix!" %></h2>
-  <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
+  <h2><%= gettext "Welcome to %{name}", name: "Justin's website running on Phoenix!" %></h2>
+  <p class="lead">Check out out my progress at <a href="https://omegaphoenix.github.io">Github Pages</a></p>
+  <p class="lead">Phoenix is a productive web framework that<br />does not compromise speed and maintainability.</p>
 </div>
 
 <div class="row marketing">
