@@ -327,6 +327,132 @@ dt {
 </dd>
 
 </dl>
+
+<hr>
+
+<h2>CS11 Weekly Report 2</h2>
+<dl>
+  <dt>Tasks Accomplished</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      Installed Elm, Elixir, Erlang, Postgres, Phoenix on server.
+      Installed Elm, Elixir, Erlang, Postgres, Phoenix on VirtualBox.
+      </p>
+    </li>
+    <li>
+      <p>
+      Tried deploying app on server using
+      <a href="http://www.phoenixframework.org/docs/advanced-deployment">
+        Exrm</a>. Got it running on port 4000
+      for <a href="http://138.68.62.145:4000/">dev</a> and port 4001
+      for <a href="http://138.68.62.145:4001/">prod</a> using the
+      <a href="http://www.phoenixframework.org/v1.2.0/docs/deployment">
+        basic guide</a>.
+      </p>
+    </li>
+    <li>
+      <p>
+      Finished everything before "Preparing the Distillery Release" section
+      in this
+      <a href="https://dennisreimann.de/articles/phoenix-deployment-gatling-ubuntu-digital-ocean.html">
+        Gatling</a> tutorial.
+      </p>
+    </li>
+  </ul>
+  </dd>
+
+  <dt>Issues Encountered</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      Installation was running smoothly until I tried to install elm using
+      npm. Using root access at the lts version of npm fixed that on the
+      server but path was missing on VirtualBox. I installed nvm and
+      removed and reinstalled nodejs on VirtualBox Xubuntu 16.04.
+      </p>
+    </li>
+    <li>
+      <p>
+      error:  Failed to load brunch config - Unexpected string ^G - Fixed
+      error by using LTS version of node (v6.10.2 instead v7)
+      </p>
+    </li>
+    <li>
+      <p>
+      "npm install" failing on VirtualBox despite using the same version as
+      on the server.
+      "npm install <packagename> --registry http://registry.npmjs.org/"
+      works. Also fixes first issue encountered this week when installing
+      Elm.
+      </p>
+    </li>
+    <li>
+      <p>
+      Wasn't sure whether to use Distillery with Gatling, Exrm with manual
+      deployment, or
+      <a href="https://hackernoon.com/state-of-the-art-in-deploying-elixir-phoenix-applications-fe72a4563cd8">
+        Docker with ansible</a>.
+      </p>
+    </li>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+  </ul>
+  </dd>
+
+  <dt>Next Week's Tasks</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+    <li>
+      <p>
+      Get basic Phoenix web application with Elm running on server.
+      </p>
+    </li>
+  </ul>
+  </dd>
+
+  <dt>Meeting Notes</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+  </ul>
+  </dd>
+</dl>
+
 <hr>
 <font size="-1">
 Last updated April 11, 2017.<br>
