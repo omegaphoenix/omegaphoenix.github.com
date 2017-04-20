@@ -17,3 +17,6 @@ config :the_juice, TheJuice.Repo,
   database: "the_juice_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+# Don't spend too much time encrypting password for tests
+config :comeonin, bcrypt_log_rounds: 4
