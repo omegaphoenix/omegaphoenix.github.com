@@ -465,6 +465,84 @@ dt {
 </dl>
 
 <hr>
+
+<h2>CS11 Weekly Report 3</h2>
+<dl>
+  <dt>Tasks Accomplished</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      Add posts and tests for posts. Add users. Save password hash. Enable
+      log in. Follow Part 1, Steps 1-4 of Hackernoon tutorial.
+      </p>
+    </li>
+    <li>
+      <p>
+      </p>
+    </li>
+    <li>
+      <p>
+      </p>
+    </li>
+    <li>
+      <p>
+      </p>
+    </li>
+  </ul>
+  </dd>
+
+  <dt>Issues Encountered</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      "curl -iL http://jkleong.com" and going to the webpage works in
+      Virtualbox but not on Mac or Android where it shows the nginx welcome
+      screen instead of the Phoenix one. The problem was that "listen 80;" in
+      nginx only listens on IPv4 and I had set Digital Ocean to use IPv6 as
+      well as IPv4. Adding the line "listen [::]:80;" handled IPv6 as well.
+      </p>
+    </li>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+  </ul>
+  </dd>
+
+  <dt>Next Week's Tasks</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      Continue hacking backend following this guide:
+      <a href="https://hackernoon.com/introduction-fe138ac6079d">
+        Writing a Blog Engine in Phoenix and Elixir</a>.
+      </p>
+    </li>
+  </ul>
+  </dd>
+
+  <dt>Meeting Notes</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+  </ul>
+  </dd>
+</dl>
+
+<hr>
 <font size="-1">
 Last updated April 18, 2017.<br>
 </font>
