@@ -473,20 +473,66 @@ dt {
   <ul>
     <li>
       <p>
-      Add posts and tests for posts. Add users. Save password hash. Enable
-      log in. Follow Part 1, Steps 1-4 of Hackernoon tutorial.
+      Add posts and tests for posts.
+      <a href="http://localhost:4000/posts">
+        http://localhost:4000/posts</a>.
+      <a href="http://jkleong/posts">
+        http://jkleong/posts</a>.
+      Test "Listing posts" page and HTML with status of 200.
+      Test creating new posts in Elixir.
+      Test "renders page not found when post id is nonexistent".
+      Test deleting posts.
       </p>
     </li>
     <li>
       <p>
+      Add user creation but not log in and no password encryption yet.
+      <a href="http://localhost:4000/users">
+        http://localhost:4000/users</a>.
+      <a href="http://jkleong/users">
+        http://jkleong/users</a>.
       </p>
     </li>
     <li>
       <p>
+      Save password hash using Comeonin.Bcrypt for encryption.
+      <a href="http://localhost:4000/users">
+        http://localhost:4000/users</a>.
+      <a href="http://jkleong/users">
+        http://jkleong/users</a>.
+      Test for comeonin call.
+      Test for nil password.
       </p>
     </li>
     <li>
       <p>
+      Enable login with login form.
+      <a href="http://localhost:4000/sessions/new">
+        http://localhost:4000/sessions/new</a>.
+      <a href="http://jkleong/sessions/new">
+        http://jkleong/sessions/new</a>.
+      Test showing the login form.
+      Test creating new user session for valid user.
+      Test whether session is created for bad login.
+      Test whether session is created for nonexistent user.
+      </p>
+    </li>
+    <li>
+      <p>
+      Expose current user so that we can see log in, log out, and login
+      failures.
+      Test current user returns the user in session.
+      Test current user returns nothing if there is no user in the session.
+      Test deleting the user session.
+      </p>
+    </li>
+    <li>
+      <p>
+      Fix login bug "nil given for :username, comparison with nil is forbidden
+      as it always evaluates to false. Pass a full query expression and use
+      is_nil/1 instead." Added function to handle invalid logins. Prevent
+      hackers from determining valid usernames by making the timing consistent
+      for real and fake usernames.
       </p>
     </li>
   </ul>
@@ -506,7 +552,17 @@ dt {
     </li>
     <li>
       <p>
-      TODO
+      Ran into the same problem as Week 1 when I tried to work back on my own
+      Xubuntu laptop.
+      Elixir wasn't connecting to the Postgres server correctly on
+      "mix ecto.create".  The error was "Error tcp connect: non-existing
+      domain - :nxdomain". To fix this, I had to set the hostname to
+      "0.0.0.0" instead of "localhost" in config/dev.exs and
+      config/test.exs. Also had to modify port to 5432 and listen_addresses
+      to '*' in /etc/postgresql/9.6/main/postgresql.conf.
+      Not sure if this issue is because of postgresql 9.6 or if it is because
+      I modified the posgresql.conf file before on this computer.
+      Hooray for documentation!
       </p>
     </li>
   </ul>
@@ -520,6 +576,13 @@ dt {
       Continue hacking backend following this guide:
       <a href="https://hackernoon.com/introduction-fe138ac6079d">
         Writing a Blog Engine in Phoenix and Elixir</a>.
+      </p>
+    </li>
+    <li>
+      <p>
+      Specifically, work on
+      <a href="https://hackernoon.com/writing-a-blog-engine-in-phoenix-part-2-authorization-814c06fa7c0">
+        Authorization</a>.
       </p>
     </li>
   </ul>
