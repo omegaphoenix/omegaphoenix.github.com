@@ -7,13 +7,13 @@ defmodule TheJuice.PostControllerTest do
   @invalid_attrs %{}
 
   setup do
-    {:ok, user} = create_user
+    {:ok, user} = create_user()
     conn = build_conn()
     |> login_user(user)
     {:ok, conn: conn, user: user}
   end
 
-  defp create_user do
+  defp create_user() do
     User.changeset(%User{}, %{email: "test@test.com", username: "test", password: "test", password_confirmation: "test"})
     |> Repo.insert
   end
