@@ -88,4 +88,21 @@ defmodule TheJuice.PostControllerTest do
     assert redirected_to(conn) == user_post_path(conn, :index, user)
     refute Repo.get(Post, post.id)
   end
+
+  test "redirects when the specified user does not exist", %{conn: conn} do
+    conn = get conn, user_post_path(conn, :index, -1)
+    assert get_flash(conn, :error) == "Invalid user!"
+    assert redirected_to(conn) == page_path(conn, :index)
+    assert conn.halted
+  end
+
+  test "redirects when trying to edit a post for a different user", %{conn: conn, user: user} do
+    other_user = User.changeset(%User{}, %{email: "test2@test.com", username: "test2", password: "test", password_confirmation: "test"})
+    |> Repo.insert!
+    post = build_post(user)
+    conn = get conn, user_post_path(conn, :edit, other_user, post)
+    assert get_flash(conn, :error) == "You are not authorized to modify that post!"
+    assert redirected_to(conn) == page_path(conn, :index)
+    assert conn.halted
+  end
 end
