@@ -3,6 +3,9 @@ defmodule TheJuice.PostController do
 
   alias TheJuice.Post
 
+  plug :scrub_params, "post" when action in [:create, :update]
+  plug :assign_user
+
   def index(conn, _params) do
     posts = Repo.all(Post)
     render(conn, "index.html", posts: posts)
@@ -15,12 +18,11 @@ defmodule TheJuice.PostController do
 
   def create(conn, %{"post" => post_params}) do
     changeset = Post.changeset(%Post{}, post_params)
-
     case Repo.insert(changeset) do
       {:ok, _post} ->
         conn
         |> put_flash(:info, "Post created successfully.")
-        |> redirect(to: post_path(conn, :index))
+        |> redirect(to: user_post_path(conn, :index, conn.assigns[:user]))
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -40,12 +42,11 @@ defmodule TheJuice.PostController do
   def update(conn, %{"id" => id, "post" => post_params}) do
     post = Repo.get!(Post, id)
     changeset = Post.changeset(post, post_params)
-
     case Repo.update(changeset) do
       {:ok, post} ->
         conn
         |> put_flash(:info, "Post updated successfully.")
-        |> redirect(to: post_path(conn, :show, post))
+        |> redirect(to: user_post_path(conn, :show, conn.assigns[:user], post))
       {:error, changeset} ->
         render(conn, "edit.html", post: post, changeset: changeset)
     end
@@ -53,13 +54,21 @@ defmodule TheJuice.PostController do
 
   def delete(conn, %{"id" => id}) do
     post = Repo.get!(Post, id)
-
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).
     Repo.delete!(post)
-
     conn
     |> put_flash(:info, "Post deleted successfully.")
-    |> redirect(to: post_path(conn, :index))
+    |> redirect(to: user_post_path(conn, :index, conn.assigns[:user]))
+  end
+
+  defp assign_user(conn, _opts) do
+    case conn.params do
+      %{"user_id" => user_id} ->
+        user = Repo.get(TheJuice.User, user_id)
+        assign(conn, :user, user)
+      _ ->
+        conn
+    end
   end
 end

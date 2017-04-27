@@ -7,6 +7,9 @@ start-interactive:
 remigrate:
 	@mix ecto.migrate
 
+routes:
+	@mix phoenix.routes
+
 install:
 	@mix deps.get
 	@mix deps.compile

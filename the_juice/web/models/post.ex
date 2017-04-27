@@ -5,6 +5,8 @@ defmodule TheJuice.Post do
     field :title, :string
     field :body, :string
 
+    belongs_to :user, TheJuice.User
+
     timestamps()
   end
 
