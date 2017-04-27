@@ -639,6 +639,10 @@ dt {
           (ecto) lib/ecto/adapters/sql.ex:436: Ecto.Adapters.SQL.execute_and_cache/7<br>
           (ecto) lib/ecto/repo/queryable.ex:130: Ecto.Repo.Queryable.execute/5<br>
           (ecto) lib/ecto/repo/queryable.ex:35: Ecto.Repo.Queryable.all/4<br>
+      Fixed by doing "mix ecto.drop" before "mix ecto.create" and
+      "mix ecto.migrate". Apparently we needed to drop the table before we
+      could apply the migration that added user_id to posts. "mix ecto.reset"
+      also works (drop+create+migrate) and "ecto.setup" (create+migrate).
       </p>
     </li>
     <li>
