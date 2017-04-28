@@ -301,7 +301,7 @@ dt {
     <li>
       <p>
         Hold off on <a href="http://www.cultivatehq.com/posts/phoenix-elm-1/">
-          Phoenix with Elm tutorial</a>. Work on backend first.
+          Phoenix with Elm tutorial</a>. Work on backend first. [Started]
       </p>
     </li>
     <li>
@@ -322,6 +322,7 @@ dt {
     <li>
       <p>
         Add authentication to website. See Programming Phoenix Chapter 5.
+        [Done]
       </p>
     </li>
   </ul>
@@ -450,14 +451,15 @@ dt {
   <ul>
     <li>
       <p>
-      Don't worry about deployment. Punt on Gatling deployment.
+      Don't worry about deployment. Punt on Gatling deployment. [Done in Week
+      4]
       </p>
     </li>
     <li>
       <p>
       Work on backend/follow the tutorial,
       <a href="https://hackernoon.com/introduction-fe138ac6079d">
-        Writing a Blog Engine in Phoenix and Elixir</a>.
+        Writing a Blog Engine in Phoenix and Elixir</a>. [Started]
       </p>
     </li>
   </ul>
@@ -599,12 +601,12 @@ dt {
     <li>
       <p>
       Switch over the https to prevent packet sniffing. Add SSL and implement
-      authorization for posts.
+      authorization for posts. [Done]
       </p>
     </li>
     <li>
       <p>
-      Better error page for invalid username/password.
+      Better error page for invalid username/password. [Done]
       </p>
     </li>
   </ul>
@@ -635,9 +637,48 @@ dt {
     </li>
     <li>
       <p>
-      Add tests for user authorization (
-      <a href="https://github.com/omegaphoenix/omegaphoenix.github.com/commit/8b628c25feed8caaaf708065307a2c94111c3294">
+      Add tests for user authorization
+      (<a href="https://github.com/omegaphoenix/omegaphoenix.github.com/commit/8b628c25feed8caaaf708065307a2c94111c3294">
         commit 8b628c2</a>).
+      </p>
+    </li>
+    <li>
+      <p>
+      Deploy using NGINX, Distillery, and Gatling
+      <a href="https://dennisreimann.de/articles/phoenix-deployment-gatling-ubuntu-digital-ocean.html">
+        NGINX, Distillery, and Gatling</a>. We had decided to punt on this
+      before but it was necessary to use releases by Distillery or Exrm to
+      enable SSL.
+      </p>
+    </li>
+    <li>
+      <p>
+      Request an SSL certificate.
+      The *.pem files are in /etc/letsencrypt/archive and symbolic links are
+      at /etc/letsencrypt/live/jkleong.com
+      "sudo letsencrypt certonly -a webroot --webroot-path=/var/www/html -d jkleong.com -d www.jkleong.com"
+      Generate Strong Diffie-Hellman Group at /etc/ssl/certs/dhparam.pem
+      <a href="https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04?refcode=63eb025a3190">
+        Digital Ocean "Let's Encrypt" Documentation</a>
+      </p>
+    </li>
+    <li>
+      <p>
+      Enable SSL/https/http2 following
+      <a href="https://dennisreimann.de/articles/phoenix-nginx-config.html">
+        Dennis Reimann's NGINX configuration tutorial</a>.
+      Check out
+      <a href="https://www.ssllabs.com/ssltest/analyze.html?d=jkleong.com">
+        the Qualys SSL Labs Report</a> which gave
+      <a href="http://jkleong.com">
+        http://jkleong.com</a> which redirects to
+      <a href="https://jkleong.com">
+        https://jkleong.com</a> an A+ for SSL encryption.
+      </p>
+    </li>
+    <li>
+      <p>
+      Add chron job to automatically renew Let's Encrypt certificates.
       </p>
     </li>
   </ul>
@@ -655,7 +696,9 @@ dt {
       ** (Postgrex.Error) ERROR 42703 (undefined_column): column p0.user_id does not exist<br>
           (ecto) lib/ecto/adapters/sql.ex:436: Ecto.Adapters.SQL.execute_and_cache/7<br>
           (ecto) lib/ecto/repo/queryable.ex:130: Ecto.Repo.Queryable.execute/5<br>
-          (ecto) lib/ecto/repo/queryable.ex:35: Ecto.Repo.Queryable.all/4<br>
+          (ecto) lib/ecto/repo/queryable.ex:35: Ecto.Repo.Queryable.all/4
+      </p>
+      <p>
       Fixed by doing "mix ecto.drop" before "mix ecto.create" and
       "mix ecto.migrate". Apparently we needed to drop the table before we
       could apply the migration that added user_id to posts. "mix ecto.reset"
@@ -678,7 +721,42 @@ dt {
     </li>
     <li>
       <p>
-      Gatling deployment failed to load static assets
+      Gatling deployment failed to load static assets. Removed priv/static
+      from .gitignore and added those files.
+      </p>
+    </li>
+    <li>
+      <p>
+      Internel server error whewn accessing
+      <a href="http://jkleong.com/users">
+        http://jkleong.com/users</a>.<br>
+      22:27:14.470 request_id=2evcgi97km05s5957fqg26psb69dei7c [info] GET /users<br>
+      22:27:14.473 request_id=2evcgi97km05s5957fqg26psb69dei7c [info] Sent 500 in 3ms<br>
+      22:27:14.477 [error] Ranch listener TheJuice.Endpoint.HTTP had connection process started with :cowboy_protocol:start_link/4 at #PID<0.1721.0> exit with reason: {{%Postgrex.Error{connection_id: 16052, message: nil, postgres: %{code: :undefined_table, file: "parse_relation.c", line: "1160", message: "relation \"users\" does not exist", pg_code: "42P01", position: "105", routine: "parserOpenTable", severity: "ERROR"}}, [{Ecto.Adapters.SQL, :execute_and_cache, 7, [file: 'lib/ecto/adapters/sql.ex', line: 436]}, {Ecto.Repo.Queryable, :execute, 5, [file: 'lib/ecto/repo/queryable.ex', line: 130]}, {Ecto.Repo.Queryable, :all, 4, [file: 'lib/ecto/repo/queryable.ex', line: 35]}, {TheJuice.UserController, :index, 2, [file: 'web/controllers/user_controller.ex', line: 7]}, {TheJuice.UserController, :action, 2, [file: 'web/controllers/user_controller.ex', line: 1]}, {TheJuice.UserController, :phoenix_controller_pipeline, 2, [file: 'web/controllers/user_controller.ex', line: 1]}, {TheJuice.Endpoint, :instrument, 4, [file: 'lib/the_juice/endpoint.ex', line: 1]}, {TheJuice.Router, :dispatch, 2, [file: 'lib/phoenix/router.ex', line: 261]}]}, {TheJuice.Endpoint, :call, [%Plug.Conn{adapter: {Plug.Adapters.Cowboy.Conn, :...}, assigns: %{}, before_send: [], body_params: %Plug.Conn.Unfetched{aspect: :body_params}, cookies: %Plug.Conn.Unfetched{aspect: :cookies}, halted: false, host: "jkleong.com", method: "GET", owner: #PID<0.1721.0>, params: %Plug.Conn.Unfetched{aspect: :params}, path_info: ["users"], path_params: %{}, peer: {{127, 0, 0, 1}, 50074}, port: 80, private: %{}, query_params: %Plug.Conn.Unfetched{aspect: :query_params}, query_string: "", remote_ip: {127, 0, 0, 1}, req_cookies: %Plug.Conn.Unfetched{aspect: :cookies}, req_headers: [{"x-real-ip", "131.215.159.175"}, {"x-forwarded-for", "131.215.159.175"}, {"host", "jkleong.com"}, {"connection", "upgrade"}, {"cache-control", "max-age=0"}, {"upgrade-insecure-requests", "1"}, {"user-agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36"}, {"accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"}, {"dnt", "1"}, {"accept-encoding", "gzip, deflate, sdch"}, {"accept-language", "en-US,en;q=0.8"}, {"cookie", "_the_juice_key=SFMyNTY.g3QAAAABbQAAAAtfY3NyZl90b2tlbm0AAAAYV2hleEJIQXM3dTFJNEVKeDRaUUNnQT09.9zvl95evBntKIOgi-7Rf7Y4dBzpZ7JWrlmD-pVL7s40"}], request_path: "/users", resp_body: nil, resp_cookies: %{}, resp_headers: [{"cache-control", "max-age=0, private, must-revalidate"}], scheme: :http, script_name: [], secret_key_base: nil, state: :unset, status: nil}, []]}}
+      </p>
+      <p>
+      Fixed by manually calling "mix ecto.reset" after checking out
+      <a href="https://github.com/omegaphoenix/omegaphoenix.github.com/commit/af9ee1563dfaeb8e10f9c34bf6c41e07a805bed1">
+        last commit before moving the files for the distillery release</a>.
+      The problem was that database migration was never called but I wasn't
+      sure how to ensure that Distillery/Gatling performs that.
+      </p>
+    </li>
+    <li>
+      <p>
+      Got 502 Bad Gateway nginx error page after restarting the_juice on the
+      server. "sudo service the_juice start" failed but "sudo service
+      the_juice restart" fixed the 502 error.
+      </p>
+    </li>
+    <li>
+      <p>
+      Got "nginx: [emerg] "http" directive is not allowed here in /etc/nginx/sites-enabled/default:1"
+      when running nginx configtest.
+      <a href="http://stackoverflow.com/questions/43643829/nginx-emerg-http-directive-is-not-allowed-here-in-etc-nginx-sites-enabled">
+        Stack Overflow</a> revealed that it was because the "ect/nginx/nginx.conf
+      file also had http. Commenting out those lines in
+      "/etc/nginx/sites-available/the_juice" fixed the issue.
       </p>
     </li>
   </ul>
@@ -689,16 +767,15 @@ dt {
   <ul>
     <li>
       <p>
-      Continue hacking backend following this guide:
-      <a href="https://hackernoon.com/introduction-fe138ac6079d">
-        Writing a Blog Engine in Phoenix and Elixir</a>.
+      <a href="https://hackernoon.com/writing-a-blog-engine-in-phoenix-and-elixir-part-3-adding-roles-to-our-models-3be45a4afe4b">
+        Add user and admin roles</a>.
       </p>
     </li>
     <li>
       <p>
-      Specifically, work on
-      <a href="https://hackernoon.com/writing-a-blog-engine-in-phoenix-part-2-authorization-814c06fa7c0">
-        Authorization</a>.
+      <a href="https://hackernoon.com/writing-a-blog-engine-in-phoenix-and-elixir-part-4-adding-roles-to-our-controllers-9f4678b48468">
+        Restrict user and admin roles to prevent non-admin users from deleting
+        everyone's account or posts across the board.</a>.
       </p>
     </li>
   </ul>
@@ -723,7 +800,7 @@ dt {
 
 <hr>
 <font size="-1">
-Last updated April 27, 2017.<br>
+Last updated April 28, 2017.<br>
 </font>
 
 
