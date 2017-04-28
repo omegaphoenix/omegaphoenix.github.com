@@ -429,7 +429,7 @@ dt {
       <p>
       Start hacking backend following this guide:
       <a href="https://hackernoon.com/introduction-fe138ac6079d">
-        Writing a Blog Engine in Phoenix and Elixir</a>.
+        Writing a Blog Engine in Phoenix and Elixir</a>. [Started]
       </p>
     </li>
     <li>
@@ -580,6 +580,108 @@ dt {
       <p>
       Continue hacking backend following this guide:
       <a href="https://hackernoon.com/introduction-fe138ac6079d">
+        Writing a Blog Engine in Phoenix and Elixir</a>. [Continued]
+      </p>
+    </li>
+    <li>
+      <p>
+      Specifically, work on
+      <a href="https://hackernoon.com/writing-a-blog-engine-in-phoenix-part-2-authorization-814c06fa7c0">
+        Authorization</a>. [Done]
+      </p>
+    </li>
+  </ul>
+  </dd>
+
+  <dt>Meeting Notes</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      Switch over the https to prevent packet sniffing. Add SSL and implement
+      authorization for posts.
+      </p>
+    </li>
+    <li>
+      <p>
+      Better error page for invalid username/password.
+      </p>
+    </li>
+  </ul>
+  </dd>
+</dl>
+
+<hr>
+
+<h2>CS11 Weekly Report 4</h2>
+<dl>
+  <dt>Tasks Accomplished</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      Add new migration to associate posts with users.
+      </p>
+    </li>
+    <li>
+      <p>
+      Create pages to show all posts for a user.
+      Restrict posting to users. Fix tests broken by adding this feature.
+      <a href="http://localhost:4000/users/1/posts">
+        http://localhost:4000/users/1/posts</a>.
+      <a href="http://jkleong.com/users/1/posts">
+        http://jkleong.com/users/1/posts</a>.
+      </p>
+    </li>
+    <li>
+      <p>
+      Add tests for user authorization (
+      <a href="https://github.com/omegaphoenix/omegaphoenix.github.com/commit/8b628c25feed8caaaf708065307a2c94111c3294">
+        commit 8b628c2</a>).
+      </p>
+    </li>
+  </ul>
+  </dd>
+
+  <dt>Issues Encountered</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      After running "iex -S mix" and "Repo.all(assoc(user, :posts))", I got
+      the following error: <br>
+      [debug] QUERY ERROR source="posts" db=4.7ms
+      SELECT p0."id", p0."title", p0."body", p0."user_id", p0."inserted_at", p0."updated_at" FROM "posts" AS p0 WHERE (p0."user_id" = $1) [1]<br>
+      ** (Postgrex.Error) ERROR 42703 (undefined_column): column p0.user_id does not exist<br>
+          (ecto) lib/ecto/adapters/sql.ex:436: Ecto.Adapters.SQL.execute_and_cache/7<br>
+          (ecto) lib/ecto/repo/queryable.ex:130: Ecto.Repo.Queryable.execute/5<br>
+          (ecto) lib/ecto/repo/queryable.ex:35: Ecto.Repo.Queryable.all/4<br>
+      Fixed by doing "mix ecto.drop" before "mix ecto.create" and
+      "mix ecto.migrate". Apparently we needed to drop the table before we
+      could apply the migration that added user_id to posts. "mix ecto.reset"
+      also works (drop+create+migrate) and "ecto.setup" (create+migrate).
+      </p>
+    </li>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+  </ul>
+  </dd>
+
+  <dt>Next Week's Tasks</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      Continue hacking backend following this guide:
+      <a href="https://hackernoon.com/introduction-fe138ac6079d">
         Writing a Blog Engine in Phoenix and Elixir</a>.
       </p>
     </li>
@@ -612,7 +714,7 @@ dt {
 
 <hr>
 <font size="-1">
-Last updated April 18, 2017.<br>
+Last updated April 27, 2017.<br>
 </font>
 
 
