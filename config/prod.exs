@@ -24,10 +24,10 @@ config :the_juice, TheJuice.Endpoint,
 config :logger, level: :info
 
 
-config :my_app, MyApp.Endpoint,
+config :the_juice, TheJuice.Endpoint,
   secret_key_base: System.get_env("SECRET_KEY_BASE")
 
-config :my_app, MyApp.Repo,
+config :the_juice, TheJuice.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: System.get_env("DB_USERNAME"),
   password: System.get_env("DB_PASSWORD"),
