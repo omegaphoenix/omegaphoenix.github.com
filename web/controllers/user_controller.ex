@@ -3,6 +3,10 @@ defmodule TheJuice.UserController do
 
   alias TheJuice.User
 
+  plug :scrub_params, "user" when action in [:create, :update]
+  plug :authorize_admin when action in [:new, :create]
+  plug :authorize_user when action in [:edit, :update, :delete]
+
   def index(conn, _params) do
     users = Repo.all(User)
     render(conn, "index.html", users: users)
@@ -61,5 +65,29 @@ defmodule TheJuice.UserController do
     conn
     |> put_flash(:info, "User deleted successfully.")
     |> redirect(to: user_path(conn, :index))
+  end
+
+  defp authorize_user(conn, _) do
+    user = get_session(conn, :current_user)
+    if user && (Integer.to_string(user.id) == conn.params["id"] || TheJuice.RoleChecker.is_admin?(user)) do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You are not authorized to modify that user!")
+      |> redirect(to: page_path(conn, :index))
+      |> halt()
+    end
+  end
+
+  defp authorize_admin(conn, _) do
+    user = get_session(conn, :current_user)
+    if user && TheJuice.RoleChecker.is_admin?(user) do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You are not authorized to create new users!")
+      |> redirect(to: page_path(conn, :index))
+      |> halt()
+    end
   end
 end
