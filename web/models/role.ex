@@ -5,6 +5,8 @@ defmodule TheJuice.Role do
     field :name, :string
     field :admin, :boolean, default: false
 
+    has_many :users, TheJuice.User
+
     timestamps()
   end
 

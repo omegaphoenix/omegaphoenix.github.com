@@ -2,12 +2,22 @@ defmodule TheJuice.UserTest do
   use TheJuice.ModelCase
 
   alias TheJuice.User
+  alias TheJuice.TestHelper
 
   @valid_attrs %{email: "test@test.com", password: "test1234", password_confirmation: "test1234", username: "testuser"}
   @invalid_attrs %{}
 
-  test "changeset with valid attributes" do
-    changeset = User.changeset(%User{}, @valid_attrs)
+  setup do
+    {:ok, role}  = TestHelper.create_role(%{name: "user", admin: false})
+    {:ok, role: role}
+  end
+
+  defp valid_attrs(role) do
+    Map.put(@valid_attrs, :role_id, role.id)
+  end
+
+  test "changeset with valid attributes", %{role: role} do
+    changeset = User.changeset(%User{}, valid_attrs(role))
     assert changeset.valid?
   end
 

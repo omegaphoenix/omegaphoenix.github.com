@@ -2,9 +2,21 @@ defmodule TheJuice.UserControllerTest do
   use TheJuice.ConnCase
 
   alias TheJuice.User
+  alias TheJuice.TestHelper
+
   @valid_create_attrs  %{email: "test@test.com", password: "test1234", password_confirmation: "test1234", username: "testuser"}
   @valid_attrs %{email: "test@test.com", username: "testuser"}
   @invalid_attrs %{}
+
+  setup do
+    {:ok, user_role}  = TestHelper.create_role(%{name: "user", admin: false})
+    {:ok, admin_role} = TestHelper.create_role(%{name: "admin", admin: true})
+    {:ok, conn: build_conn(), user_role: user_role, admin_role: admin_role}
+  end
+
+  defp valid_create_attrs(role) do
+    Map.put(@valid_create_attrs, :role_id, role.id)
+  end
 
   test "lists all entries on index", %{conn: conn} do
     conn = get conn, user_path(conn, :index)
@@ -16,8 +28,8 @@ defmodule TheJuice.UserControllerTest do
     assert html_response(conn, 200) =~ "New user"
   end
 
-  test "creates resource and redirects when data is valid", %{conn: conn} do
-    conn = post conn, user_path(conn, :create), user: @valid_create_attrs
+  test "creates resource and redirects when data is valid", %{conn: conn, user_role: user_role} do
+    conn = post conn, user_path(conn, :create), user: valid_create_attrs(user_role)
     assert redirected_to(conn) == user_path(conn, :index)
     assert Repo.get_by(User, @valid_attrs)
   end
@@ -45,9 +57,9 @@ defmodule TheJuice.UserControllerTest do
     assert html_response(conn, 200) =~ "Edit user"
   end
 
-  test "updates chosen resource and redirects when data is valid", %{conn: conn} do
+  test "updates chosen resource and redirects when data is valid", %{conn: conn, user_role: user_role} do
     user = Repo.insert! %User{}
-    conn = put conn, user_path(conn, :update, user), user: @valid_create_attrs
+    conn = put conn, user_path(conn, :update, user), user: valid_create_attrs(user_role)
     assert redirected_to(conn) == user_path(conn, :show, user)
     assert Repo.get_by(User, @valid_attrs)
   end
