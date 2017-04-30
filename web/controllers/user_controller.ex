@@ -2,6 +2,7 @@ defmodule TheJuice.UserController do
   use TheJuice.Web, :controller
 
   alias TheJuice.User
+  alias TheJuice.Role
 
   plug :scrub_params, "user" when action in [:create, :update]
   plug :authorize_admin when action in [:new, :create]
@@ -12,12 +13,26 @@ defmodule TheJuice.UserController do
     render(conn, "index.html", users: users)
   end
 
+  def show(conn, %{"id" => id}) do
+    user = Repo.get!(User, id)
+    render(conn, "show.html", user: user)
+  end
+
   def new(conn, _params) do
+    roles = Repo.all(Role)
     changeset = User.changeset(%User{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, roles: roles)
+  end
+
+  def edit(conn, %{"id" => id}) do
+    roles = Repo.all(Role)
+    user = Repo.get!(User, id)
+    changeset = User.changeset(user)
+    render(conn, "edit.html", user: user, changeset: changeset, roles: roles)
   end
 
   def create(conn, %{"user" => user_params}) do
+    roles = Repo.all(Role)
     changeset = User.changeset(%User{}, user_params)
 
     case Repo.insert(changeset) do
@@ -26,22 +41,12 @@ defmodule TheJuice.UserController do
         |> put_flash(:info, "User created successfully.")
         |> redirect(to: user_path(conn, :index))
       {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, roles: roles)
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    user = Repo.get!(User, id)
-    render(conn, "show.html", user: user)
-  end
-
-  def edit(conn, %{"id" => id}) do
-    user = Repo.get!(User, id)
-    changeset = User.changeset(user)
-    render(conn, "edit.html", user: user, changeset: changeset)
-  end
-
   def update(conn, %{"id" => id, "user" => user_params}) do
+    roles = Repo.all(Role)
     user = Repo.get!(User, id)
     changeset = User.changeset(user, user_params)
 
@@ -51,7 +56,7 @@ defmodule TheJuice.UserController do
         |> put_flash(:info, "User updated successfully.")
         |> redirect(to: user_path(conn, :show, user))
       {:error, changeset} ->
-        render(conn, "edit.html", user: user, changeset: changeset)
+        render(conn, "edit.html", user: user, changeset: changeset, roles: roles)
     end
   end
 

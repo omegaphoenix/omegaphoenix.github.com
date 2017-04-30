@@ -799,6 +799,96 @@ dt {
 </dl>
 
 <hr>
+
+<h2>CS11 Weekly Report 5</h2>
+<dl>
+  <dt>Tasks Accomplished</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      Set up models to deal with roles. Add admin role and update tests.
+      </p>
+    </li>
+    <li>
+      <p>
+      Restrict user creation to admins. Add tests for this functionality.
+      </p>
+    </li>
+    <li>
+      <p>
+      Allow admins to modify all posts. Add tests for this functionality.
+      </p>
+    </li>
+    <li>
+      <p>
+      Add role selection to users/new form.
+      </p>
+    </li>
+    <li>
+      <p>
+      Add new migration to associate posts with users. Seed database with
+      "Admin Role" and "User Role." Fix seeds file so that it runs multiple
+      times without error.
+      </p>
+    </li>
+    <li>
+      <p>
+      Prevent running seeds multiple times from duplicating data.
+      </p>
+    </li>
+  </ul>
+  </dd>
+
+  <dt>Issues Encountered</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      Missing User Role.  Creating new user only allows "Admin Role". Fixed by
+      updating seeds.exs file to add "User Role".
+      </p>
+    </li>
+    <li>
+      <p>
+      Running seeds file multiple times duplicates data. Check if role or
+      username already creates before adding.
+      </p>
+    </li>
+    <li>
+      <p>
+      Tests fail because they are trying to create a user that already exists.
+      Modify the create_user() method to delete the user if the username
+      exists before creating the user.
+      </p>
+    </li>
+  </ul>
+  </dd>
+
+  <dt>Next Week's Tasks</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+  </ul>
+  </dd>
+
+  <dt>Meeting Notes</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      TODO
+      </p>
+    </li>
+  </ul>
+  </dd>
+</dl>
+
+<hr>
 <font size="-1">
 Last updated April 28, 2017.<br>
 </font>

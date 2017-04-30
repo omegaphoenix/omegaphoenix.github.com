@@ -12,6 +12,9 @@ defmodule TheJuice.TestHelper do
   end
 
   def create_user(role, %{email: email, username: username, password: password, password_confirmation: password_confirmation}) do
+    if user = Repo.get_by(User, username: username) do
+      Repo.delete(user)
+    end
     role
     |> build_assoc(:users)
     |> User.changeset(%{email: email, username: username, password: password, password_confirmation: password_confirmation})
