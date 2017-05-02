@@ -7,6 +7,7 @@ defmodule TheJuice.User do
     field :email, :string
     field :password_digest, :string
 
+    belongs_to :role, TheJuice.Role
     has_many :posts, TheJuice.Post
 
     timestamps()
@@ -21,8 +22,8 @@ defmodule TheJuice.User do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:username, :email, :password, :password_confirmation])
-    |> validate_required([:username, :email, :password, :password_confirmation])
+    |> cast(params, [:username, :email, :password, :password_confirmation, :role_id])
+    |> validate_required([:username, :email, :password, :password_confirmation, :role_id])
     |> hash_password
   end
 
