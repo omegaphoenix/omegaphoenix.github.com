@@ -6,6 +6,7 @@ defmodule TheJuice.Post do
     field :body, :string
 
     belongs_to :user, TheJuice.User
+    has_many :comments, TheJuice.Comment
 
     timestamps()
   end
