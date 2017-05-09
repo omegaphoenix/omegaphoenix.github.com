@@ -895,6 +895,22 @@ dt {
       Fixed by including the upgrade.exs file which called "mix ecto.migrate".
       </p>
     </li>
+    <li>
+      <p>
+      Release 0.0.5 didn't work on production. Needed to add earmark to
+      "applications" in mix.exs.
+      </p>
+    </li>
+    <li>
+      <p>
+      NPM error when pushing to production.<br>
+      remote: $ npm run deploy (/home/justin/the_juice)<br>
+      remote: > @ deploy /home/justin/the_juice<br>
+      remote: > brunch build --production<br>
+      remote: sh: 1: brunch: not found<br>
+
+      </p>
+    </li>
   </ul>
   </dd>
 

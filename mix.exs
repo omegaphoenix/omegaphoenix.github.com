@@ -3,7 +3,7 @@ defmodule TheJuice.Mixfile do
 
   def project do
     [app: :the_juice,
-     version: "0.0.4",
+     version: "0.0.5",
      elixir: "~> 1.2",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
@@ -19,7 +19,7 @@ defmodule TheJuice.Mixfile do
   def application do
     [mod: {TheJuice, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :comeonin, :ex_machina]]
+                    :phoenix_ecto, :postgrex, :comeonin, :ex_machina, :earmark]]
   end
 
   # Specifies which paths to compile per environment.
