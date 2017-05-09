@@ -40,7 +40,8 @@ defmodule TheJuice.Mixfile do
      {:cowboy, "~> 1.0"},
      {:comeonin, "~> 2.3"},
      {:distillery, "~>1.3.5"},
-     {:ex_machina, "~>1.0"}]
+     {:ex_machina, "~>2.0"},
+     {:earmark, "~>1.2.1"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
