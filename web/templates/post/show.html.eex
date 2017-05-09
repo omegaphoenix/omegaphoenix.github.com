@@ -15,12 +15,19 @@
 </ul>
 
 <div class="comments">
- <h2>Comments</h2>
- <%= for comment <- @post.comments do %>
-   <%= render TheJuice.CommentView, "comment.html", comment: comment %>
- <% end %>
+  <h2>Comments</h2>
+  <%= for comment <- @post.comments do %>
+    <%= render TheJuice.CommentView,
+      "comment.html",
+      comment: comment,
+      author_or_admin: @conn.assigns[:author_or_admin],
+      conn: @conn,
+      post: @post
+    %>
+  <% end %>
 </div>
 
+<hr>
 <%= render TheJuice.CommentView, "form.html", changeset: @comment_changeset, action: post_comment_path(@conn, :create, @post) %>
 
 <%= link "Edit", to: user_post_path(@conn, :edit, @user, @post) %>
