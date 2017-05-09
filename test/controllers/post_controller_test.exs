@@ -4,13 +4,15 @@ defmodule TheJuice.PostControllerTest do
   alias TheJuice.Post
   alias TheJuice.TestHelper
 
+  import TheJuice.Factory
+
   @valid_attrs %{body: "some content", title: "some content"}
   @invalid_attrs %{}
 
   setup do
-    {:ok, role} = TestHelper.create_role(%{name: "User Role", admin: false})
-    {:ok, user} = TestHelper.create_user(role, %{email: "test@test.com", username: "testuser", password: "test", password_confirmation: "test"})
-    {:ok, post} = TestHelper.create_post(user, %{title: "Test Post", body: "Test Body"})
+    role = insert(:role)
+    user = insert(:user, role: role)
+    post = insert(:post, user: user)
     conn = build_conn() |> login_user(user)
     {:ok, conn: conn, user: user, role: role, post: post}
   end

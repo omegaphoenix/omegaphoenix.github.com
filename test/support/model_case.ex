@@ -22,6 +22,7 @@ defmodule TheJuice.ModelCase do
       import Ecto.Changeset
       import Ecto.Query
       import TheJuice.ModelCase
+      import TheJuice.Factory
     end
   end
 
