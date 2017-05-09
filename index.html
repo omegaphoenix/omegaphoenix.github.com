@@ -727,7 +727,7 @@ dt {
     </li>
     <li>
       <p>
-      Internel server error whewn accessing
+      Internel server error when accessing
       <a href="http://jkleong.com/users">
         http://jkleong.com/users</a>.<br>
       22:27:14.470 request_id=2evcgi97km05s5957fqg26psb69dei7c [info] GET /users<br>
@@ -870,6 +870,17 @@ dt {
       Tests fail because they are trying to create a user that already exists.
       Modify the create_user() method to delete the user if the username
       exists before creating the user.
+      </p>
+    </li>
+    <li>
+      <p>
+      Internel server error after upgrading release when accessing
+      <a href="http://jkleong.com/users">
+        http://jkleong.com/users</a>.<br>
+      </p>
+      <p>
+      Related to issue from last week.
+      Fixed by including the upgrade.exs file which called "mix ecto.migrate".
       </p>
     </li>
   </ul>

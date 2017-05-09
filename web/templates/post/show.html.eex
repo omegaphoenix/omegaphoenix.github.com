@@ -10,4 +10,5 @@
   </li>
 </ul>
 <%= link "Edit", to: user_post_path(@conn, :edit, @user, @post) %>
+
 <%= link "Back", to: user_post_path(@conn, :index, @user) %>

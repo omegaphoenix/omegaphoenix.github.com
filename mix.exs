@@ -19,7 +19,7 @@ defmodule TheJuice.Mixfile do
   def application do
     [mod: {TheJuice, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :comeonin]]
+                    :phoenix_ecto, :postgrex, :comeonin, :ex_machina]]
   end
 
   # Specifies which paths to compile per environment.
@@ -39,7 +39,8 @@ defmodule TheJuice.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:comeonin, "~> 2.3"},
-     {:distillery, "~>1.3.5"}]
+     {:distillery, "~>1.3.5"},
+     {:ex_machina, "~>1.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
