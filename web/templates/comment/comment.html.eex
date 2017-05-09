@@ -10,7 +10,10 @@
       <div class="col-xs-4 text-right">
         <%= if @conn.assigns[:author_or_admin] do %>
           <%= unless @comment.approved do %>
-            <button class="btn btn-xs btn-primary approve">Approve</button>
+						<%= form_for @conn, post_comment_path(@conn, :update, @post, @comment), [method: :put, as: :comment, style: "display: inline;"], fn f -> %>
+							<%= hidden_input f, :approved, value: "true" %>
+							<%= submit "Approve", class: "btn btn-xs btn-primary approve" %>
+						<% end %>
           <% end %>
           <%= link "Delete",
                 method: :delete,
