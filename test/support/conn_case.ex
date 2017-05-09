@@ -26,6 +26,7 @@ defmodule TheJuice.ConnCase do
       import Ecto.Query
 
       import TheJuice.Router.Helpers
+      import TheJuice.Factory
 
       # The default endpoint for testing
       @endpoint TheJuice.Endpoint

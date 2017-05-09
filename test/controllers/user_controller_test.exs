@@ -3,16 +3,18 @@ defmodule TheJuice.UserControllerTest do
   alias TheJuice.User
   alias TheJuice.TestHelper
 
+  import TheJuice.Factory
+
   @valid_create_attrs %{email: "test@test.com", username: "test", password: "test", password_confirmation: "test"}
   @valid_attrs %{email: "test@test.com", username: "test"}
   @invalid_attrs %{}
 
   setup do
-    {:ok, user_role}     = TestHelper.create_role(%{name: "user", admin: false})
-    {:ok, nonadmin_user} = TestHelper.create_user(user_role, %{email: "nonadmin@test.com", username: "nonadmin", password: "test", password_confirmation: "test"})
+    user_role     = insert(:role)
+    nonadmin_user = insert(:user, role: user_role)
 
-{:ok, admin_role}    = TestHelper.create_role(%{name: "admin", admin: true})
-    {:ok, admin_user}    = TestHelper.create_user(admin_role, %{email: "admin@test.com", username: "admin", password: "test", password_confirmation: "test"})
+    admin_role = insert(:role, admin: true)
+    admin_user = insert(:user, role: admin_role)
 
     {:ok, conn: build_conn(), admin_role: admin_role, user_role: user_role, nonadmin_user: nonadmin_user, admin_user: admin_user}
   end
