@@ -969,7 +969,10 @@ dt {
   <ul>
     <li>
       <p>
-      GET test failed since the content had changed.
+      GET test failed since the content had changed. Tried to change the
+      content but the test still failed. A closer inspection revealed that the
+      issue was that an apostrophe is represented as "& # 3 9;" with no spaces
+      in between the letters in html.
       </p>
     </li>
     <li>
