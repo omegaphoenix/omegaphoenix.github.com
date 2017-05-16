@@ -1,37 +1,17 @@
 <div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}", name: "Phoenix!" %></h2>
+  <h2><%= gettext "Welcome to %{name}", name: "Justin's website!" %></h2>
   <p class="lead">Check out out my progress at <a href="https://omegaphoenix.github.io">Github Pages</a></p>
-  <p class="lead">Phoenix is a productive web framework that<br />does not compromise speed and maintainability.</p>
 </div>
+<table class="table">
+  <tbody>
+<%= for user <- @users do %>
+    <tr>
+      <td><%= user.username %></td>
 
-<div class="row marketing">
-  <div class="col-lg-6">
-    <h4>Resources</h4>
-    <ul>
-      <li>
-        <a href="http://phoenixframework.org/docs/overview">Guides</a>
-      </li>
-      <li>
-        <a href="https://hexdocs.pm/phoenix">Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-    </ul>
-  </div>
-
-  <div class="col-lg-6">
-    <h4>Help</h4>
-    <ul>
-      <li>
-        <a href="http://groups.google.com/group/phoenix-talk">Mailing list</a>
-      </li>
-      <li>
-        <a href="http://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">@elixirphoenix</a>
-      </li>
-    </ul>
-  </div>
-</div>
+      <td class="text-right">
+        <%= link "Posts", to: user_post_path(@conn, :index, user), class: "btn btn-default btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
