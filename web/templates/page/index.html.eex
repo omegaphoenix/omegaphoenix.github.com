@@ -2,3 +2,16 @@
   <h2><%= gettext "Welcome to %{name}", name: "Justin's website!" %></h2>
   <p class="lead">Check out out my progress at <a href="https://omegaphoenix.github.io">Github Pages</a></p>
 </div>
+<table class="table">
+  <tbody>
+<%= for user <- @users do %>
+    <tr>
+      <td><%= user.username %></td>
+
+      <td class="text-right">
+        <%= link "Posts", to: user_post_path(@conn, :index, user), class: "btn btn-default btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
