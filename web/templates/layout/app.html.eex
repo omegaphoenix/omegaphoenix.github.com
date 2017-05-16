@@ -17,6 +17,9 @@
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
             <li>
+              <%= link "Home", to: page_path(@conn, :index) %>
+            </li>
+            <li>
               <%= if user = current_user(@conn) do %>
                 Logged in as
                 <strong><%= user.username %></strong>
