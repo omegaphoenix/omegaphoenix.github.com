@@ -1042,17 +1042,18 @@ dt {
   <ul>
     <li>
       <p>
-      TODO
+      Add signed token to specify the verified user id.
       </p>
     </li>
     <li>
       <p>
-      TODO
+      Implement comments channel per post
       </p>
     </li>
     <li>
       <p>
-      TODO
+      Broadcast new comments to authorized users. Broadcast approve comments
+      to all users. Remove deleted comments from all users.
       </p>
     </li>
   </ul>
@@ -1063,7 +1064,14 @@ dt {
   <ul>
     <li>
       <p>
-      TODO
+      Tests failing for comments broadcast:<br>
+     ** (EXIT from #PID<0.375.0>) an exception was raised:
+         ** (FunctionClauseError) no function clause matching in TheJuice.CommentChannel.join/3
+             (the_juice) web/channels/comment_channel.ex:5: TheJuice.CommentChannel.join("comment:lobby", %{}, %Phoenix.Socket{assigns: %{some: :assign}, channel: TheJuice.CommentChannel, channel_pid: #PID<0.377.0>, endpoint: TheJuice.Endpoint, handler: nil, id: "user_id", joined: false, pubsub_server: TheJuice.PubSub, ref: nil, serializer: Phoenix.ChannelTest.NoopSerializer, topic: "comment:lobby", transport: Phoenix.ChannelTest, transport_name: :channel_test, transport_pid: #PID<0.375.0>})
+             (phoenix) lib/phoenix/channel/server.ex:170: Phoenix.Channel.Server.init/1
+             (stdlib) gen_server.erl:328: :gen_server.init_it/6
+             (stdlib) proc_lib.erl:247: :proc_lib.init_p_do_apply/3<br>
+      Fixed by adding setup using Factory before running tests
       </p>
     </li>
     <li>
