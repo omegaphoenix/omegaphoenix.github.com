@@ -17,7 +17,7 @@ defmodule TheJuice.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    resources "/users", UserController do
+    resources "/users", UserController, param: "username" do
       resources "/posts", PostController
     end
     resources "/sessions", SessionController, only: [:new, :create, :delete]

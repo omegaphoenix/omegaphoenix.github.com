@@ -1023,10 +1023,10 @@ dt {
   <ul>
     <li>
       <p>
-      Broadcast comments, clean up user number in url, add logging
+      Broadcast comments, clean up user number in url, add logging.
       </p>
       <p>
-      Start reading up on Elm
+      Start reading up on Elm.
       </p>
     </li>
   </ul>
@@ -1056,6 +1056,17 @@ dt {
       to all users. Remove deleted comments from all users.
       </p>
     </li>
+    <li>
+      <p>
+      Logging enabled by default by nginx at '/var/log/nginx/access.log' on
+      server.
+      </p>
+    </li>
+    <li>
+      <p>
+      Clean up user number in url to use username instead.
+      </p>
+    </li>
   </ul>
   </dd>
 
@@ -1076,12 +1087,21 @@ dt {
     </li>
     <li>
       <p>
-      TODO
+      Changing url to accept name instead of id breaks links.
+      Fixed by using Repo.get_by! and adding a  Phoenix.Param protocol<br>
+      <a href="https://stackoverflow.com/questions/36221552/url-to-accept-string-instead-of-id-with-spaces">
+        Stackoverflow Answer</a>.
       </p>
     </li>
     <li>
       <p>
-      TODO
+      Getting invalid user when trying to go to
+      <a href="https://jkleong.com/users/justin/posts">
+        Posts</a> from
+      <a href="https://jkleong.com">
+        Homepage</a>.<br>
+      Fixed by changing username to user_username which was determined using
+      IO.inspect() to print out parameters in assign_user function.
       </p>
     </li>
   </ul>
@@ -1092,12 +1112,12 @@ dt {
   <ul>
     <li>
       <p>
-      TODO
+      Integrate Elm.
       </p>
     </li>
     <li>
       <p>
-      TODO
+      Fix tests.
       </p>
     </li>
   </ul>
@@ -1108,10 +1128,7 @@ dt {
   <ul>
     <li>
       <p>
-      TODO
-      </p>
-      <p>
-      TODO
+      Next Week's Task is fine.
       </p>
     </li>
   </ul>
