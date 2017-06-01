@@ -13,8 +13,8 @@ defmodule TheJuice.UserController do
     render(conn, "index.html", users: users)
   end
 
-  def show(conn, %{"id" => id}) do
-    user = Repo.get!(User, id)
+  def show(conn, %{"username" => username}) do
+    user = Repo.get_by!(User, username: username)
     render(conn, "show.html", user: user)
   end
 
@@ -24,9 +24,9 @@ defmodule TheJuice.UserController do
     render(conn, "new.html", changeset: changeset, roles: roles)
   end
 
-  def edit(conn, %{"id" => id}) do
+  def edit(conn, %{"username" => username}) do
     roles = Repo.all(Role)
-    user = Repo.get!(User, id)
+    user = Repo.get_by!(User, username: username)
     changeset = User.changeset(user)
     render(conn, "edit.html", user: user, changeset: changeset, roles: roles)
   end
@@ -45,9 +45,9 @@ defmodule TheJuice.UserController do
     end
   end
 
-  def update(conn, %{"id" => id, "user" => user_params}) do
+  def update(conn, %{"username" => username, "user" => user_params}) do
     roles = Repo.all(Role)
-    user = Repo.get!(User, id)
+    user = Repo.get_by!(User, username: username)
     changeset = User.changeset(user, user_params)
 
     case Repo.update(changeset) do
@@ -60,8 +60,8 @@ defmodule TheJuice.UserController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    user = Repo.get!(User, id)
+  def delete(conn, %{"username" => username}) do
+    user = Repo.get_by!(User, username: username)
 
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).
@@ -74,7 +74,7 @@ defmodule TheJuice.UserController do
 
   defp authorize_user(conn, _) do
     user = get_session(conn, :current_user)
-    if user && (Integer.to_string(user.id) == conn.params["id"] || TheJuice.RoleChecker.is_admin?(user)) do
+    if user && (user.username == conn.params["username"] || TheJuice.RoleChecker.is_admin?(user)) do
       conn
     else
       conn

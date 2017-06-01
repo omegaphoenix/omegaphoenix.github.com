@@ -73,7 +73,7 @@ defmodule TheJuice.UserControllerTest do
   end
 
   test "shows chosen resource", %{conn: conn} do
-    user = Repo.insert! %User{}
+    user = Repo.insert! %User{username: "test_show"}
     conn = get conn, user_path(conn, :show, user)
     assert html_response(conn, 200) =~ "Show user"
   end
@@ -110,17 +110,17 @@ defmodule TheJuice.UserControllerTest do
   @tag admin: true
   test "updates chosen resource and redirects when data is valid when logged in as that user", %{conn: conn, nonadmin_user: nonadmin_user} do
     conn = login_user(conn, nonadmin_user)
-    conn = put conn, user_path(conn, :update, nonadmin_user), user: @valid_create_attrs
+    conn = put conn, user_path(conn, :update, nonadmin_user), user: Map.put(@valid_create_attrs, :username, nonadmin_user.username)
     assert redirected_to(conn) == user_path(conn, :show, nonadmin_user)
-    assert Repo.get_by(User, @valid_attrs)
+    assert Repo.get_by(User, Map.put(@valid_attrs, :username, nonadmin_user.username))
   end
 
   @tag admin: true
   test "updates chosen resource and redirects when data is valid when logged in as an admin", %{conn: conn, admin_user: admin_user} do
     conn = login_user(conn, admin_user)
-    conn = put conn, user_path(conn, :update, admin_user), user: @valid_create_attrs
+    conn = put conn, user_path(conn, :update, admin_user), user: Map.put(@valid_create_attrs, :username, admin_user.username)
     assert redirected_to(conn) == user_path(conn, :show, admin_user)
-    assert Repo.get_by(User, @valid_attrs)
+    assert Repo.get_by(User, Map.put(@valid_attrs, :username, admin_user.username))
   end
 
   @tag admin: true

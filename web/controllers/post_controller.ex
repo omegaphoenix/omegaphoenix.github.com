@@ -1,6 +1,7 @@
 defmodule TheJuice.PostController do
   use TheJuice.Web, :controller
 
+  alias TheJuice.User
   alias TheJuice.Post
 
   plug :scrub_params, "post" when action in [:create, :update]
@@ -76,8 +77,8 @@ defmodule TheJuice.PostController do
 
   defp assign_user(conn, _opts) do
     case conn.params do
-      %{"user_id" => user_id} ->
-        case Repo.get(TheJuice.User, user_id) do
+      %{"user_username" => username} ->
+        case Repo.get_by(User, username: username) do
           nil  -> invalid_user(conn)
           user -> assign(conn, :user, user)
         end
@@ -105,7 +106,7 @@ defmodule TheJuice.PostController do
 
   defp is_authorized_user?(conn) do
     user = get_session(conn, :current_user)
-    (user && (Integer.to_string(user.id) == conn.params["user_id"] || TheJuice.RoleChecker.is_admin?(user)))
+    (user && (user.username == conn.params["user_username"] || TheJuice.RoleChecker.is_admin?(user)))
   end
 
   defp set_authorization_flag(conn, _opts) do

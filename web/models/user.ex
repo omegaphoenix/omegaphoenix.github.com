@@ -35,4 +35,10 @@ defmodule TheJuice.User do
       changeset
     end
   end
+
+  defimpl Phoenix.Param do
+    def to_param(%{username: username}) do
+      to_string(username)
+    end
+  end
 end
