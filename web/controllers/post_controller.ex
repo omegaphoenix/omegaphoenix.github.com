@@ -106,7 +106,7 @@ defmodule TheJuice.PostController do
 
   defp is_authorized_user?(conn) do
     user = get_session(conn, :current_user)
-    (user && (user.username == conn.params["username"] || TheJuice.RoleChecker.is_admin?(user)))
+    (user && (user.username == conn.params["user_username"] || TheJuice.RoleChecker.is_admin?(user)))
   end
 
   defp set_authorization_flag(conn, _opts) do
