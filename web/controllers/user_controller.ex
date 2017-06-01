@@ -74,7 +74,7 @@ defmodule TheJuice.UserController do
 
   defp authorize_user(conn, _) do
     user = get_session(conn, :current_user)
-    if user && (Integer.to_string(user.id) == conn.params["id"] || TheJuice.RoleChecker.is_admin?(user)) do
+    if user && (user.username == conn.params["username"] || TheJuice.RoleChecker.is_admin?(user)) do
       conn
     else
       conn
