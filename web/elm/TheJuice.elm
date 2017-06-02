@@ -1,11 +1,10 @@
 module TheJuice exposing (..)
 
-import Html
+import Html exposing (Html, text, div)
+import Html.Attributes exposing (class)
 
+import Components.ArticleList as ArticleList
+
+main : Html a
 main =
-  view
-
--- VIEW
-
-view =
-  Html.text "Woo hoo, I'm in a View"
+  div [ class "elm-app" ] [ArticleList.view ]

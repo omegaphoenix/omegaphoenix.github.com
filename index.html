@@ -12,6 +12,11 @@ dt {
 
 </style>
 
+<script type="text/javascript">
+onload = function(){
+      document.getElementById("lastModified").innerHTML = "Page last modified " + document.lastModified.split(" ")[0];
+}
+</script>
 </head>
 
 <body>
@@ -1153,6 +1158,13 @@ dt {
       successfully and pushed to production.
       </p>
     </li>
+    <li>
+      <p>
+      Found
+      <a href="https://medium.com/@diamondgfx/writing-a-full-site-in-phoenix-and-elm-a100804c9499">
+        this nice Phoenix/Elm tutorial</a>.
+      </p>
+    </li>
   </ul>
   </dd>
 
@@ -1213,10 +1225,7 @@ dt {
 <hr>
 
 <font size="-1">
-Last updated May 28, 2017.<br>
+<span id="lastModified"></span>
 </font>
-
-
-
 
 </body></html>
