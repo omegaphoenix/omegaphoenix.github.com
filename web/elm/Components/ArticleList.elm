@@ -12,9 +12,9 @@ type alias Model =
 articles : Model
 articles =
   { articles =
-    [ { title = "Article 1", url = "http://google.com", postedBy = "justin", postedOn = "07/02/17" }
-    , { title = "Article 2", url = "http://google.com", postedBy = "justin", postedOn = "07/02/17" }
-    , { title = "Article 3", url = "http://google.com", postedBy = "justin", postedOn = "07/02/17" } ] }
+    [ { title = "Project Plan", url = "https://omegaphoenix.github.io/", postedBy = "justin", postedOn = "07/02/17" }
+    , { title = "Meeting Notes", url = "https://omegaphoenix.github.io/", postedBy = "justin", postedOn = "07/02/17" }
+    , { title = "Post 1", url = "https://jkleong.com/users/justin/posts/1/", postedBy = "justin", postedOn = "07/02/17" } ] }
 
 type Msg
   = NoOp
