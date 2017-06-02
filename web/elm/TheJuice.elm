@@ -7,4 +7,4 @@ import Components.ArticleList as ArticleList
 
 main : Html a
 main =
-  div [ class "elm-app" ] [ArticleList.view ]
+  div [ class "elm-app" ] [ ArticleList.view ]
