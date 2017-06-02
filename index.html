@@ -1206,6 +1206,23 @@ onload = function(){
         Stackoverflow</a>, the contents of Html.App were moved to the Html package in version 0.18.
       </p>
     </li>
+    <li>
+      <p>
+      Ran into bug when pushing to production<br>
+      justin@TheDiesel:~/Documents/Website$ git push production master<br>
+      Counting objects: 36, done.<br>
+      Delta compression using up to 4 threads.<br>
+      Compressing objects: 100% (35/35), done.<br>
+      Writing objects: 100% (36/36), 5.18 KiB | 0 bytes/s, done.<br>
+      Total 36 (delta 18), reused 0 (delta 0)<br>
+      remote: error: insufficient permission for adding an object to repository database ./objects<br>
+      remote: fatal: failed to write object<br>
+      error: unpack failed: unpack-objects abnormal exit<br>
+      To justin@jkleong.com:the_juice<br>
+      ! [remote rejected] master -> master (unpacker error)<br>
+      error: failed to push some refs to 'justin@jkleong.com:the_juice'<br>
+      </p>
+    </li>
   </ul>
   </dd>
 
