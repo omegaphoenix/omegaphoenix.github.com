@@ -23,6 +23,7 @@ defmodule TheJuice.User do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:username, :email, :password, :password_confirmation, :role_id])
+    |> unique_constraint(:username)
     |> validate_required([:username, :email, :password, :password_confirmation, :role_id])
     |> hash_password
   end
