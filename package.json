@@ -13,7 +13,7 @@
     "babel-brunch": "~6.0.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-es2016": "^6.24.1",
-    "brunch": "^2.7.4",
+    "brunch": "^2.6.5",
     "clean-css-brunch": "~2.0.0",
     "css-brunch": "~2.0.0",
     "elm": "^0.18.0",
