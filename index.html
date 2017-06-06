@@ -1271,12 +1271,21 @@ onload = function(){
     <li>
       <p>
       Fix brunch issue by downgrading to 2.6.5 from 2.7.4 since the former
-      was consistent with deps/phoenix/package.json
+      was consistent with deps/phoenix/package.json.
+      Also uninstalled brunch globally on server.
       </p>
     </li>
     <li>
       <p>
       Add unique constraint on username. Remigrated database on server.
+      </p>
+    </li>
+    <li>
+      <p>
+      Enabled gzip on nginx which up'ed my PageSpeed score from 71 for mobile
+      up to 85 and up to 88 for Desktop using
+      <a href="https://github.com/h5bp/server-configs-nginx/blob/master/nginx.conf">
+        this nginx.conf</a> with user www-data;
       </p>
     </li>
   </ul>
@@ -1295,6 +1304,44 @@ onload = function(){
       <p>
       npm error claiming that package.json did not exist for deps/phoenix_html
       <br>
+      </p>
+    </li>
+    <li>
+      <p>
+      brunch ocassionally fails on push (errno 137 which means kill 9
+      according to Stackoverflow)
+      <br>
+      </p>
+    </li>
+  </ul>
+  </dd>
+
+  <dt>Future Tasks and Questions</dt>
+  <dd>
+  <ul>
+    <li>
+      <p>
+      Should I move deployment to use docker?
+      </p>
+    </li>
+    <li>
+      <p>
+      Should  I use Elm?
+      </p>
+    </li>
+    <li>
+      <p>
+      What else do I need to finish before working on generating content?
+      </p>
+    </li>
+    <li>
+      <p>
+      What should I do to gain a better understanding of Elm and Elixir?
+      </p>
+    </li>
+    <li>
+      <p>
+      Should I integrate Disqus's comments system instead of using my own?
       </p>
     </li>
   </ul>
