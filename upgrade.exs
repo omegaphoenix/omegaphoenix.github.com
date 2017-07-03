@@ -8,6 +8,5 @@ defmodule TheJuice.UpgradeCallbacks do
 
   def before_upgrade_service(env) do
     bash("mix", ~w[ecto.migrate], cd: env.build_dir)
-    bash("mix", ~w[run priv/repo/seeds.exs], cd: env.build_dir)
   end
 end
