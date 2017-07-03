@@ -78,6 +78,9 @@ defmodule TheJuice.UserController do
       conn
     else
       conn
+      |> put_flash(:error, "You are not authorized to modify that user!")
+      |> redirect(to: page_path(conn, :index))
+      |> halt()
     end
   end
 
