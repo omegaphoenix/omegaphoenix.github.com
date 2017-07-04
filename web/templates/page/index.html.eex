@@ -1,8 +1,8 @@
-<div id="elm-main"></div>
+<!--<div id="elm-main"></div>-->
 
 <div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}", name: "Justin's website!" %></h2>
-  <p class="lead">Check out out my progress at <a href="https://omegaphoenix.github.io">Github Pages</a></p>
+  <h2><%= gettext "Welcome to %{name}", name: "Justin Leong's website!" %></h2>
+  <p class="lead">Check out out my projects at <a href="https://github.com/omegaphoenix">Github</a></p>
 </div>
 <table class="table">
   <tbody>

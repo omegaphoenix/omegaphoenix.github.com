@@ -12,8 +12,7 @@ type alias Model =
 articles : Model
 articles =
   { articles =
-    [ { title = "Project Plan", url = "https://omegaphoenix.github.io/", postedBy = "justin", postedOn = "07/02/17" }
-    , { title = "Meeting Notes", url = "https://omegaphoenix.github.io/", postedBy = "justin", postedOn = "07/02/17" }
+    [ { title = "How I built this website", url = "https://omegaphoenix.github.io/", postedBy = "justin", postedOn = "07/02/17" }
     , { title = "Post 1", url = "https://jkleong.com/users/justin/posts/1/", postedBy = "justin", postedOn = "07/02/17" } ] }
 
 type Msg
