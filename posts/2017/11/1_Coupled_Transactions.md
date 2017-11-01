@@ -178,7 +178,7 @@ I tried using a semaphore to avoid deadlock by decrementing the semaphore before
 
 Also, my CTO, Jeff, and a co-worker/contractor, Myron, helped code review the coupled transaction code. They suggested passing in 2 functions to make the code more testable.  They also suggested using a closure or bind instead of passing in the transaction. Now I was able to test the code by passing in one good transaction and one bad one to make sure that it would error and roll back the transactions in both databases.
 
-By caching our select queries, we no longer ran into the Knex connection timeout but we added an exponential backoff in the exec function in case we did run into this issue again.  I think we still have a problem where exec is called after starting a transaction so the backoff is only effective at throttling the select queries which is wrong.
+By caching our select queries, we no longer ran into the Knex connection timeout but we added an exponential backoff in the exec function in case we did run into this issue again.  I think we still have a problem where exec is called after starting a transaction so the backoff is only effective at throttling the select queries which is wrong. The exponential backoff code is omitted for simplicity.
 
 Here is our code after all those changes:
 
@@ -187,32 +187,8 @@ export type sqlTransaction = (trx: knex.Transaction) => Promise<void>;
 
 export class DB {
 	\\ ...
-  async exec<T>(fn: bluebird<T>, backoff: number = 1): Promise<T> {
-    let result: T | undefined = undefined;
-    await new Promise(async (resolve, reject) => {
-      try {
-        result = await fn;
-        resolve();
-      } catch (err) {
-        if (err.message !== undefined && err.message.includes('Knex: Timeout acquiring a connection.')) {
-          // If we get this error, we already waited at least 2 minutes for a connection.
-          logger.error(`Timeout Level ${backoff}: ${err.message}`);
-
-          const exponentialBackoff = Math.floor(Math.random() * Math.pow(2, backoff)) * MILSEC_PER_SEC;
-          await bluebird.delay(exponentialBackoff);
-
-          // Maximum wait time is 2^10 = 1024 seconds
-          result = await this.exec<T>(fn, Math.min(backoff + 1, 10));
-          resolve();
-        } else {
-          reject(err);
-        }
-      }
-    });
-
-    if (backoff > 1) {
-      logger.warn(`Completed with timeout level ${backoff}`);
-    }
+  async exec<T>(fn: bluebird<T>): Promise<T> {
+    const result = await fn;
     return undefToNull(result) as T;
   }
 
