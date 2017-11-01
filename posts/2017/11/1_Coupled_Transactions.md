@@ -61,23 +61,23 @@ We had two DB objects to represent our two databases and all inserts/updates/del
 I added these methods to our DB class.
 
 ```typescript
-  async startTx(): Promise<pg.Client> {
-    const client = await this.pool.connect();
-    await client.query('begin');
-    return client;
-  }
+async startTx(): Promise<pg.Client> {
+  const client = await this.pool.connect();
+  await client.query('begin');
+  return client;
+}
 
-  async doTx(client: pg.Client, fn: (client: pg.Client) => Promise<any>): Promise<void> {
-    await fn(client);
-  }
+async doTx(client: pg.Client, fn: (client: pg.Client) => Promise<any>): Promise<void> {
+  await fn(client);
+}
 
-  async commitTx(client: pg.Client): Promise<void> {
-    client.query('commit');
-  }
+async commitTx(client: pg.Client): Promise<void> {
+  client.query('commit');
+}
 
-  async rollbackTx(client: pg.Client): Promise<void> {
-    client.query('rollback');
-  }
+async rollbackTx(client: pg.Client): Promise<void> {
+  client.query('rollback');
+}
 ```
 
 Then I implemented the execSetter() function as a coupled transaction:
