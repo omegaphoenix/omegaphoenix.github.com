@@ -109,7 +109,7 @@ async function execSetter(setter: (db: DB, client: pg.Client) => Promise<void>):
 
 Naively, I ran it and assumed it worked since it worked on a local test run.
 
-Of course, as soon as we ran the application on multiple games we started running into issues where our pool ran out of connections and our application was deadlocked. (Our application was updating the database for applications downstream based on data from the NBA so it was running live from the NBA's PBP data.)
+Of course, as soon as we ran the application on multiple games we started running into issues where our pool ran out of connections and our application was deadlocked. (Our application was updating the database for applications downstream based on data from the NBA so it was running live from the NBA's play-by-play data.)
 
 After a well deserved lecture on the dangers of calling `begin`, `commit`, and `rollback` directly from the Typescript code and the multitude of issues with the testibility and design of the code in which golden nuggets of wisdom were bestowed upon me, I went ahead and refactored all the database code using Knex. The idea was that even if this didn't solve our root issue, it would be much easier to debug.
 
@@ -167,16 +167,18 @@ export class DB {
 }
 ```
 
-Looking at the code now, this would have failed without the `syncedParams` passed into the constructor so that shouldn't be optional unless we had a check in the `doubleTransaction()` function for `syncedDBConn` being updefined.
+Looking at the code now, this would have failed without the `syncedParams` passed into the constructor so that shouldn't be optional unless we had a check in the `doubleTransaction()` function for `syncedDBConn` being undefined.
 
 When putting high load on the system, however, we were still running into a timeout issue:
 
 `UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 1): TimeoutError: Knex: Timeout acquiring a connection. The pool is probably full. Are you missing a .transacting(trx) call?`
 
 ## More Refactoring and Current Solution
-I tried using a semaphore to avoid deadlock by decrementing the semaphore before any get or exec call.  Although I ended up not using the sempahore code since it seemed to conflict with asynchronous design.  From logging the times that our database queries were taking (on the suggestion of Eric, our VP of Engineering), we noticed that our select queries started taking minutes to complete possibly because we were hammering the database. Caching our select queries reduced our database accesses by several orders of magnitude.
+I tried using a semaphore to avoid deadlock by decrementing the semaphore before any get or exec call.  Although I ended up not using the semaphore code since it seemed to conflict with asynchronous design.  From logging the times that our database queries were taking (on the suggestion of Eric, our VP of Engineering), we noticed that our select queries started taking minutes to complete possibly because we were hammering the database. Caching our select queries reduced our database accesses by several orders of magnitude.
 
-Also, my CTO, Jeff, and a co-worker/contractor, Myron, helped code review the coupled transaction code. They suggested passing in 2 functions to make the code more testable.  They also suggested using a closure or bind instead of passing in the transaction. Now I was able to test the code by passing in one good transaction and one bad one to make sure that it would error and roll back the transactions in both databses.
+Also, my CTO, Jeff, and a co-worker/contractor, Myron, helped code review the coupled transaction code. They suggested passing in 2 functions to make the code more testable.  They also suggested using a closure or bind instead of passing in the transaction. Now I was able to test the code by passing in one good transaction and one bad one to make sure that it would error and roll back the transactions in both databases.
+
+By caching our select queries, we no longer ran into the Knex connection timeout but we added an exponential backoff in the exec function in case we did run into this issue again.  I think we still have a problem where exec is called after starting a transaction so the backoff is only effective at throttling the select queries which is wrong.
 
 Here is our code after all those changes:
 
