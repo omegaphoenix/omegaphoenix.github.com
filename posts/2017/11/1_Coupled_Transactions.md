@@ -12,7 +12,9 @@ We are also assuming that other applications keep the databases in sync which ma
 ## Approach
 My initial idea was to use transactions.  We could start a transaction in each of the databases and do the insert/update/delete in both databases.  Then we would wait until the changes completed in both databases before committing both transactions.
 
-## Failure Coupling Transactions with pg (stands for Postgres not Pau Gasol or Paul Graham)
+## Failure Coupling Transactions with pg
+*pg stands for Postgres not Pau Gasol or Paul Graham*
+
 We were already using the pg library and we had a `DB` class.
 
 ```typescript
@@ -59,23 +61,23 @@ We had two DB objects to represent our two databases and all inserts/updates/del
 I added these methods to our DB class.
 
 ```typescript
-async startTx(): Promise<pg.Client> {
-  const client = await this.pool.connect();
-  await client.query('begin');
-  return client;
-}
+  async startTx(): Promise<pg.Client> {
+    const client = await this.pool.connect();
+    await client.query('begin');
+    return client;
+  }
 
-async doTx(client: pg.Client, fn: (client: pg.Client) => Promise<any>): Promise<void> {
-  await fn(client);
-}
+  async doTx(client: pg.Client, fn: (client: pg.Client) => Promise<any>): Promise<void> {
+    await fn(client);
+  }
 
-async commitTx(client: pg.Client): Promise<void> {
-  client.query('commit');
-}
+  async commitTx(client: pg.Client): Promise<void> {
+    client.query('commit');
+  }
 
-async rollbackTx(client: pg.Client): Promise<void> {
-  client.query('rollback');
-}
+  async rollbackTx(client: pg.Client): Promise<void> {
+    client.query('rollback');
+  }
 ```
 
 Then I implemented the execSetter() function as a coupled transaction:
@@ -109,9 +111,12 @@ Naively, I ran it and assumed it worked since it worked on a local test run.
 
 Of course, as soon as we ran the application on multiple games we started running into issues where our pool ran out of connections and our application was deadlocked. (Our application was updating the database for applications downstream based on data from the NBA so it was running live from the NBA's PBP data.)
 
-After a well deserved lecture on the dangers of calling `begin`, `commit`, and `rollback` directly from the Typescript code and the multitude of issues with the testibility and design of the code in which wisdom was bestowed upon me, I went ahead and refactored all the database code using Knex.
+After a well deserved lecture on the dangers of calling `begin`, `commit`, and `rollback` directly from the Typescript code and the multitude of issues with the testibility and design of the code in which golden nuggets of wisdom were bestowed upon me, I went ahead and refactored all the database code using Knex. The idea was that even if this didn't solve our root issue, it would be much easier to debug.
+
+The databases would probably deadlock on the startTx() call since the order in which the database connections were established was not guaranteed.
 
 ## First Pass with Knex
+Refactoring the code to use Knex really cleaned up the codebase. Although our first approach theoretically allowed us to sync any number of databases (assuming we didn't run into deadlock), syncing more databases probably indicates a need for an architectural redesign.  This time we kept all database connections within a single class.
 
 ```typescript
 export class DB {
@@ -124,33 +129,141 @@ export class DB {
       this.syncedDBConn = conn.conn(syncedParams);
     }
   }
-  // ...
-}
 
-async doubleTransaction(
-  fn: (trx: Knex.Transaction, table: string, target: object) => Promise<void>,
-  table: string,
-  target: object,
-): Promise<void> {
-  await this.dbConn.transaction(async trx => {
-    try {
-      await fn(trx, table, target);
-    } catch (err) {
-      logger.error(`Transaction error ${err}`);
-      throw err;
-    }
-
-    await this.syncedDBConn.transaction(async syncedTrx => {
+  async doubleTransaction(
+    fn: (trx: Knex.Transaction, table: string, target: object) => Promise<void>,
+    table: string,
+    target: object
+  ): Promise<void> {
+    await this.dbConn.transaction(async trx => {
       try {
-        await fn(syncedTrx, table, target);
-      } catch (err) {
         logger.error(`Transaction error ${err}`);
+        await fn(trx, table, target);
+      } catch (err) {
         throw err;
       }
+
+      await this.syncedDBConn.transaction(async syncedTrx => {
+        try {
+          await fn(syncedTrx, table, target);
+        } catch (err) {
+          logger.error(`Transaction error ${err}`);
+          throw err;
+        }
+      });
     });
-  });
+  }
+
+  async insert(table: string, toInsert: object): Promise<void> {
+    this.doubleTransaction(this.insertDB, table, toInsert);
+  }
+
+  private async insertDB(trx: Knex.Transaction, table: string, toInsert: object): Promise<void> {
+    logger.warn(`Inserting ${table} ${JSON.stringify(toInsert)}`);
+    await trx.insert(toInsert).into(table);
+  }
+
+  // getters, update, and delete methods omitted
 }
 ```
 
-## Miscellaneous Thoughts
-We were also using prepared statements before refactoring.
+Looking at the code now, this would have failed without the `syncedParams` passed into the constructor so that shouldn't be optional unless we had a check in the `doubleTransaction()` function for `syncedDBConn` being updefined.
+
+When putting high load on the system, however, we were still running into a timeout issue:
+
+`UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 1): TimeoutError: Knex: Timeout acquiring a connection. The pool is probably full. Are you missing a .transacting(trx) call?`
+
+## More Refactoring and Current Solution
+I tried using a semaphore to avoid deadlock by decrementing the semaphore before any get or exec call.  Although I ended up not using the sempahore code since it seemed to conflict with asynchronous design.  From logging the times that our database queries were taking (on the suggestion of Eric, our VP of Engineering), we noticed that our select queries started taking minutes to complete possibly because we were hammering the database. Caching our select queries reduced our database accesses by several orders of magnitude.
+
+Also, my CTO, Jeff, and a co-worker/contractor, Myron, helped code review the coupled transaction code. They suggested passing in 2 functions to make the code more testable.  They also suggested using a closure or bind instead of passing in the transaction. Now I was able to test the code by passing in one good transaction and one bad one to make sure that it would error and roll back the transactions in both databses.
+
+Here is our code after all those changes:
+
+```typescript
+export type sqlTransaction = (trx: knex.Transaction) => Promise<void>;
+
+export class DB {
+	\\ ...
+  async exec<T>(fn: bluebird<T>, backoff: number = 1): Promise<T> {
+    let result: T | undefined = undefined;
+    await new Promise(async (resolve, reject) => {
+      try {
+        result = await fn;
+        resolve();
+      } catch (err) {
+        if (err.message !== undefined && err.message.includes('Knex: Timeout acquiring a connection.')) {
+          // If we get this error, we already waited at least 2 minutes for a connection.
+          logger.error(`Timeout Level ${backoff}: ${err.message}`);
+
+          const exponentialBackoff = Math.floor(Math.random() * Math.pow(2, backoff)) * MILSEC_PER_SEC;
+          await bluebird.delay(exponentialBackoff);
+
+          // Maximum wait time is 2^10 = 1024 seconds
+          result = await this.exec<T>(fn, Math.min(backoff + 1, 10));
+          resolve();
+        } else {
+          reject(err);
+        }
+      }
+    });
+
+    if (backoff > 1) {
+      logger.warn(`Completed with timeout level ${backoff}`);
+    }
+    return undefToNull(result) as T;
+  }
+
+  async doubleTransaction(fn: sqlTransaction, syncedFn: sqlTransaction = fn): Promise<void> {
+    try {
+      const transactions = this.dbConn.transaction(async trx => {
+        const p1 = fn(trx);
+        const p2 = this.syncedDBConn.transaction(async syncedTrx => {
+          try {
+            await syncedFn(syncedTrx);
+          } catch (err) {
+            logger.error(`Second (synced) database ${err}`);
+            throw `Second (synced) database ${err}`;
+          }
+        });
+
+        return Promise.all([p1, p2]);
+      });
+
+      await this.exec<void>(transactions);
+    } catch (err) {
+      logger.error(`Transaction error - ${err}`);
+      throw err;
+    }
+  }
+
+ async insert(table: string, toInsert: object): Promise<void> {
+    if (!config.WRITE_CANONICAL) {
+      logger.warn('Not writing to canonical. We will miss inserts');
+      return;
+    }
+
+    const fn = async (trx: knex.Transaction) => {
+      await this.insertDB(table, toInsert, trx);
+    };
+    await this.doubleTransaction(fn);
+  }
+
+  private async insertDB(table: string, toInsert: object, trx: knex.Transaction): Promise<void> {
+    logger.info(`Inserting ${table} ${JSON.stringify(toInsert)}`);
+    await trx.insert(toInsert).into(table);
+  }
+
+}
+```
+
+## Miscellaneous
+In the process of refactoring, I also removed the prepared statements that we were using which might have been a premature optimization anyways.
+
+Do the scars(edge cases) in our battle tested code make it more or less beautiful?  I once read an article against nuking everything and rewriting it even though it may be ugly because of all the edge cases and errors that it has run into.  The author argued that refactoring it was a much better option.  Even as code gets cleaned up elegantly, the extra code for protecting against edge cases still makes the code more clunky but helps people sleep at night.
+
+It was a great learning experience and fun being on call 24/7 for a piece of code you maintain.  It's great motivation to make it handle error cases well and extra motivation to write testable code and use good practices such as stricter code reviews.  It also helps me sleep at night.
+
+Thanks to Bill, who wrote the original code, and Eric, Jeff, and Myron, whom all weighed in on our bugs and code on different points in the process.
+
+Kareem Abdul-Jabbar (Lew Alcindor) perfected his skyhook through practicing the Mikan drill.  He would slowly move further away from the basket as he warmed up.
