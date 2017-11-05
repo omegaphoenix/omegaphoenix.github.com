@@ -1,7 +1,3 @@
----
-title: Coupled Transactions
----
-
 # Coupled Transactions
 ## Overview
 After several iterations of trial and error, I write code to update two databases while keeping them in sync.
