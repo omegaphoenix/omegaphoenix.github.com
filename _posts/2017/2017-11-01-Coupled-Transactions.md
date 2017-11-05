@@ -1,6 +1,5 @@
 ---
 title: Coupled Transactions
-layout: post
 ---
 
 # Coupled Transactions
