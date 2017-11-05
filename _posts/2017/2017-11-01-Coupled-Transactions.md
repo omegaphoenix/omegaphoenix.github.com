@@ -1,3 +1,8 @@
+---
+title: "Coupled Transactions"
+description: "After several iterations of trial and error, I write code to update two databases while keeping them in sync."
+tags: [typescript]
+---
 # Coupled Transactions
 After several iterations of trial and error, I write code to update two databases while keeping them in sync.
 
